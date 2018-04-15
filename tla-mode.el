@@ -46,9 +46,14 @@
   (let ((st (make-syntax-table)))
     (modify-syntax-entry ?_ "w" st)
 
-    (modify-syntax-entry ?\( ". 1" st)
+    ;; (* *) comment style
+    (modify-syntax-entry ?\( ". 1c" st)
     (modify-syntax-entry ?* ". 23" st)
-    (modify-syntax-entry ?\) ". 4" st)
+    (modify-syntax-entry ?\) ". 4c" st)
+
+    ;; \* comment style
+    (modify-syntax-entry ?\\ ". 1nc" st)
+    (modify-syntax-entry ?\n "> nc" st)
 
     ; Return st
     st
