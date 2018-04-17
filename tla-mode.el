@@ -24,7 +24,7 @@
     "CONSTANT" "CONSTANTS" "VARIABLE" "VARIABLES"
     "IF" "THEN" "ELSE"
     "CHOOSE" "CASE" "OTHER"
-    "LET"
+    "LET" "IN"
     "RECURSIVE"
     "ENABLED" "UNCHANGED"
     "SUBSET" "UNION"
@@ -35,6 +35,12 @@
     "PROOF" "OBVIOUS" "OMITTED" "BY" "QED"
     "SUFFICES" "PICK" "HAVE" "TAKE" "WITNESS"
     "ACTION" "STATE" "WF" "SF"
+    ;; Keywords for PlusCal
+    "if" "else" "either" "or" "while" "wait"
+    "when" "with" "skip" "print" "assert"
+    "goto" "procedure" "call" "return" "process"
+    "macro" "variable" "variables" "define"
+    "fair" "self"
     ))
 
 (defvar tla-mode-types
