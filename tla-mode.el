@@ -36,7 +36,7 @@
     "SUFFICES" "PICK" "HAVE" "TAKE" "WITNESS"
     "ACTION" "STATE" "WF" "SF"
     ;; Keywords for PlusCal
-    "if" "else" "either" "or" "while" "wait"
+    "if" "else" "either" "or" "while" "await"
     "when" "with" "skip" "print" "assert"
     "goto" "procedure" "call" "return" "process"
     "macro" "variable" "variables" "define"
@@ -47,6 +47,21 @@
   '("Int" "BOOLEAN"))
 
 (defvar tla-tab-width 2 "Width of a tab")
+
+(defvar tla-mode-pluscal-syntax-table
+(let ((st (make-syntax-table)))
+    (modify-syntax-entry ?_ "w" st)
+
+    ;; \* comment style
+    (modify-syntax-entry ?\\ ". 1nc" st)
+    (modify-syntax-entry ?* ". 23" st)
+    (modify-syntax-entry ?\n "> nc" st)
+
+    ; Return st
+    st
+    )
+  "Syntax table for tla-mode for PlusCal lines"
+)
 
 (defvar tla-mode-syntax-table
   (let ((st (make-syntax-table)))
@@ -67,6 +82,28 @@
   "Syntax table for tla-mode"
   )
 
+;; Inspired from https://stackoverflow.com/a/25251144
+(defun apply-custom-syntax-table (start end)
+  (save-excursion
+    (save-restriction
+      (widen)
+      (goto-char start)
+      ;; for every line between points 'start' and 'end'
+      (while (and (not (eobp)) (< (point) end))
+	(beginning-of-line)
+	;; if it starts with (* --algorithm
+	(when (looking-at "^(.*--algorithm")
+	  ;; remove current syntax-table property
+	  (remove-text-properties (1- (line-beginning-position))
+				  (1+ (line-end-position))
+				  '(syntax-table))
+	  ;; set syntax-table property to our custom one
+	  ;; for the whole line including the beginning and ending newlines
+	  (add-text-properties (1- (line-beginning-position))
+			       (1+ (line-end-position))
+			       (list 'syntax-table tla-mode-pluscal-syntax-table)))
+	(forward-line 1)))))
+
 (defvar tla-font-lock-defaults
   `((
      ;; stuff between "
@@ -76,6 +113,8 @@
      ( ,(regexp-opt tla-mode-keywords 'words) . font-lock-keyword-face)
      ( ,(regexp-opt tla-mode-constants 'words) . font-lock-constant-face)
      ( ,(regexp-opt tla-mode-types 'words) . font-lock-type-face)
+     ;; pluscal labels
+     ("^[a-z|_]+:" . font-lock-constant-face)
      )))
 
 
@@ -89,6 +128,8 @@
   ;; for writing comments (not fontifying them)
   (setq-local comment-start "(*")
   (setq-local comment-end "*)")
+
+  (setq syntax-propertize-function 'apply-custom-syntax-table)
 
   (setq-local prettify-symbols-alist
 	      '(
