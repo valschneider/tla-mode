@@ -114,7 +114,7 @@
      ( ,(regexp-opt tla-mode-constants 'words) . font-lock-constant-face)
      ( ,(regexp-opt tla-mode-types 'words) . font-lock-type-face)
      ;; pluscal labels
-     ("^[a-z|_]+:" . font-lock-constant-face)
+     ("^\\w+:" . font-lock-constant-face)
      )))
 
 
