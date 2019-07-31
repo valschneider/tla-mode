@@ -208,7 +208,7 @@
   ;; Auto revert because pluscal modifies its input file
   (auto-revert-mode t)
   ;; Simple and stupid way to indent with tabs
-  (local-set-key (kbd "<tab>") (lambda() (interactive) (insert "\t")))
+  (local-set-key (kbd "<tab>") (lambda() (interactive) (insert "    ")))
   )
 
 ;;;###autoload
